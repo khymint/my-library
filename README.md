@@ -19,3 +19,12 @@
 - Open Library 및 Google Books 책 정보 조회
 - 개인 서재와 북리뷰를 기기 브라우저에 저장
 - 홈 화면 설치(PWA)
+
+
+## iPhone 바코드 수정판
+
+이 버전은 iPhone Safari에서 지원되지 않을 수 있는 `BarcodeDetector` 대신
+`html5-qrcode`를 실시간 스캐너로 사용합니다.
+
+GitHub에 기존 `index.html`과 `sw.js`를 이 버전으로 교체한 뒤,
+Safari에서 페이지를 새로 열거나 홈 화면 아이콘을 삭제 후 다시 추가하세요.

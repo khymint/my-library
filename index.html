@@ -9,13 +9,13 @@
   <meta name="apple-mobile-web-app-title" content="나의 서재" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-  <title>나의 서재 · 모바일 ISBN 스캐너</title>
+  <title>나의 서재 · iPhone ISBN 스캐너</title>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     :root{--bg:#f7f3ed;--panel:#fffdf9;--ink:#2d2925;--muted:#77706a;--line:#e7ddd1;--accent:#72533d;--accent2:#efe3d5;--danger:#a23b3b;--safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom)}
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Pretendard,sans-serif} button,input,select,textarea{font:inherit}.app{max-width:720px;margin:auto;padding:calc(18px + var(--safe-top)) 16px calc(92px + var(--safe-bottom))}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}h1{margin:0;font-family:Georgia,serif;font-size:34px}.sub{font-size:13px;color:var(--muted);margin-top:4px}.count{background:var(--ink);color:#fff;border-radius:16px;padding:10px 15px;text-align:center}.count strong{display:block;font-size:22px}.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 8px 24px rgba(70,48,31,.06);margin-bottom:14px}h2{font-size:18px;margin:0 0 12px}.hero{display:grid;gap:10px}.scan-button{width:100%;min-height:58px;border:0;border-radius:16px;background:var(--accent);color:#fff;font-weight:800;font-size:17px}.manual-row{display:flex;gap:8px}input,select,textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:13px;color:var(--ink)}button{border:0;border-radius:13px;padding:12px 14px;font-weight:800}.primary{background:var(--accent);color:white}.secondary{background:var(--accent2);color:var(--accent)}.ghost{background:transparent;border:1px solid var(--line)}.danger{background:#faeded;color:var(--danger)}.hint,.status{color:var(--muted);font-size:13px;line-height:1.45;margin:8px 0 0}.toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px}.toolbar select{grid-column:1/-1}.books{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.book{border:1px solid var(--line);background:white;border-radius:17px;padding:10px;display:flex;flex-direction:column;min-height:300px}.cover{width:100%;aspect-ratio:3/4;object-fit:cover;background:#eee6dc;border-radius:11px}.cover-placeholder{display:grid;place-items:center;text-align:center;padding:8px;color:var(--muted)}.book h3{font-size:15px;line-height:1.35;margin:9px 0 4px}.meta{font-size:12px;line-height:1.4;color:var(--muted)}.badge{display:inline-flex;width:max-content;margin-top:7px;padding:4px 7px;border-radius:999px;background:var(--accent2);color:var(--accent);font-size:11px;font-weight:800}.actions{display:flex;gap:5px;margin-top:auto;padding-top:9px}.actions button{flex:1;padding:8px 5px;font-size:11px}.empty{grid-column:1/-1;padding:40px 18px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:16px}
     dialog{border:0;padding:0;width:min(520px,calc(100% - 20px));max-height:90dvh;border-radius:22px;box-shadow:0 24px 80px rgba(0,0,0,.3)}dialog::backdrop{background:rgba(25,20,16,.55)}.modal{padding:18px;overflow:auto;max-height:90dvh}.modal-head{display:flex;align-items:center;justify-content:space-between}.modal h2{margin:0}.modal label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}.row{display:flex;gap:8px}.toast{position:fixed;left:50%;bottom:calc(22px + var(--safe-bottom));transform:translateX(-50%) translateY(15px);background:#24211e;color:#fff;padding:11px 14px;border-radius:12px;opacity:0;transition:.2s;pointer-events:none;z-index:50;max-width:calc(100% - 32px);text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-    .scanner{position:fixed;inset:0;background:#050505;z-index:100;display:none}.scanner.open{display:block}.scanner video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.scanner-ui{position:absolute;inset:0;padding:calc(14px + var(--safe-top)) 14px calc(18px + var(--safe-bottom));display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(rgba(0,0,0,.45),transparent 25%,transparent 65%,rgba(0,0,0,.65))}.scanner-top{display:flex;justify-content:space-between;gap:8px}.round{background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px)}.scan-frame{position:absolute;left:8%;right:8%;top:36%;height:150px;border:3px solid #fff;border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.25)}.scan-line{position:absolute;left:5%;right:5%;height:2px;background:#fff;top:50%;animation:scan 1.8s infinite ease-in-out}@keyframes scan{0%,100%{transform:translateY(-55px)}50%{transform:translateY(55px)}}.scanner-bottom{text-align:center;color:#fff}.scanner-bottom p{margin:0 0 12px;font-size:14px}.scanner-actions{display:flex;gap:8px}.scanner-actions button{flex:1}.camera-select{max-width:190px;background:rgba(0,0,0,.55);color:#fff;border-color:rgba(255,255,255,.35)}#readerHidden{position:fixed;left:-9999px;width:640px;height:480px}.install{display:none}.install.show{display:block;width:100%;margin-top:8px}
+    .scanner{position:fixed;inset:0;background:#050505;z-index:100;display:none}.scanner.open{display:block}#readerLive{position:absolute;inset:0;overflow:hidden}#readerLive video{width:100%!important;height:100%!important;object-fit:cover!important}.scanner-ui{position:absolute;inset:0;padding:calc(14px + var(--safe-top)) 14px calc(18px + var(--safe-bottom));display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(rgba(0,0,0,.45),transparent 25%,transparent 65%,rgba(0,0,0,.65))}.scanner-top{display:flex;justify-content:space-between;gap:8px}.round{background:rgba(0,0,0,.55);color:#fff;border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px)}.scan-frame{position:absolute;left:8%;right:8%;top:36%;height:150px;border:3px solid #fff;border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.25)}.scan-line{position:absolute;left:5%;right:5%;height:2px;background:#fff;top:50%;animation:scan 1.8s infinite ease-in-out}@keyframes scan{0%,100%{transform:translateY(-55px)}50%{transform:translateY(55px)}}.scanner-bottom{text-align:center;color:#fff}.scanner-bottom p{margin:0 0 12px;font-size:14px}.scanner-actions{display:flex;gap:8px}.scanner-actions button{flex:1}.camera-select{max-width:190px;background:rgba(0,0,0,.55);color:#fff;border-color:rgba(255,255,255,.35)}#readerHidden{position:fixed;left:-9999px;width:640px;height:480px}.install{display:none}.install.show{display:block;width:100%;margin-top:8px}
     @media(min-width:620px){.books{grid-template-columns:repeat(3,minmax(0,1fr))}.toolbar{grid-template-columns:1fr 160px auto}.toolbar select{grid-column:auto}}
   </style>
 </head>
@@ -36,7 +36,7 @@
 </main>
 
 <section id="scannerView" class="scanner" aria-hidden="true">
-  <video id="cameraVideo" playsinline muted></video>
+  <div id="readerLive"></div>
   <div class="scan-frame"><div class="scan-line"></div></div>
   <div class="scanner-ui">
     <div class="scanner-top"><button id="closeScanner" class="round">✕ 닫기</button><select id="cameraSelect" class="camera-select"></select></div>
@@ -52,7 +52,7 @@
 <script>
 const STORAGE_KEY='my-isbn-library-mobile-v1';
 let books=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
-let stream=null, detector=null, scanning=false, rafId=null, torchOn=false, deferredPrompt=null;
+let liveQr=null, scanning=false, torchOn=false, deferredPrompt=null;
 const $=s=>document.querySelector(s);
 const toast=m=>{const e=$('#toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2400)};
 const normalizeIsbn=v=>(v||'').replace(/[^0-9Xx]/g,'').toUpperCase();
@@ -67,14 +67,105 @@ const cover=u=>(u||'').replace(/^http:/,'https:');
 async function openLibrary(isbn){const r=await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=data&format=json`);if(!r.ok)return null;const d=await r.json(),x=d[`ISBN:${isbn}`];if(!x)return null;return{isbn,title:x.title||'',author:(x.authors||[]).map(a=>a.name).join(', '),publisher:(x.publishers||[]).map(p=>p.name).join(', '),cover:cover(x.cover?.large||x.cover?.medium||x.cover?.small),category:(x.subjects||[]).slice(0,2).map(v=>v.name||v).join(', ')}}
 async function googleBooks(isbn){const r=await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&maxResults=5`);if(!r.ok)return null;const d=await r.json(),item=(d.items||[]).find(i=>(i.volumeInfo?.industryIdentifiers||[]).some(v=>normalizeIsbn(v.identifier)===isbn))||d.items?.[0];if(!item)return null;const x=item.volumeInfo||{};return{isbn,title:[x.title,x.subtitle].filter(Boolean).join(' — '),author:(x.authors||[]).join(', '),publisher:x.publisher||'',cover:cover(x.imageLinks?.large||x.imageLinks?.medium||x.imageLinks?.thumbnail),category:(x.categories||[]).slice(0,2).join(', ')}}
 async function lookupIsbn(raw){const isbn=normalizeIsbn(raw);if(!validIsbn(isbn)){toast('올바른 ISBN을 입력해 주세요.');return}$('#isbnInput').value=isbn;if(books.some(b=>b.isbn===isbn)){toast('이미 등록된 책입니다.');return}$('#lookupBtn').disabled=true;$('#lookupStatus').textContent=`ISBN ${isbn} 검색 중…`;try{let b=await openLibrary(isbn);if(!b)b=await googleBooks(isbn);if(b){openForm({...b,status:'읽고 싶은 책',note:''});$('#lookupStatus').textContent=`“${b.title}” 정보를 찾았습니다.`;toast('책 정보를 찾았습니다.')}else{openForm({isbn,status:'읽고 싶은 책'});$('#lookupStatus').textContent='책 정보를 찾지 못해 직접 입력 화면을 열었습니다.'}}catch(e){console.error(e);openForm({isbn,status:'읽고 싶은 책'});$('#lookupStatus').textContent='온라인 조회에 실패했습니다. 인터넷 연결을 확인하세요.'}finally{$('#lookupBtn').disabled=false}}
-async function enumerateCameras(){try{const devices=await navigator.mediaDevices.enumerateDevices();const cams=devices.filter(d=>d.kind==='videoinput');$('#cameraSelect').innerHTML=cams.map((c,i)=>`<option value="${c.deviceId}">${esc(c.label||`카메라 ${i+1}`)}</option>`).join('');const rear=cams.find(c=>/back|rear|environment|후면/i.test(c.label));if(rear)$('#cameraSelect').value=rear.deviceId}catch(e){console.warn(e)}}
-async function stopCamera(){scanning=false;if(rafId)cancelAnimationFrame(rafId);rafId=null;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$('#cameraVideo').srcObject=null;torchOn=false}
-async function startCamera(deviceId=''){await stopCamera();const constraints={audio:false,video:deviceId?{deviceId:{exact:deviceId},width:{ideal:1920},height:{ideal:1080}}:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}};stream=await navigator.mediaDevices.getUserMedia(constraints);const video=$('#cameraVideo');video.srcObject=stream;await video.play();await enumerateCameras();const current=stream.getVideoTracks()[0].getSettings().deviceId;if(current)$('#cameraSelect').value=current;scanning=true;$('#cameraStatus').textContent='책 뒤의 978 또는 979 바코드를 사각형 안에 맞추세요.';scanLoop()}
-async function scanLoop(){if(!scanning)return;try{if('BarcodeDetector'in window){if(!detector)detector=new BarcodeDetector({formats:['ean_13']});const codes=await detector.detect($('#cameraVideo'));if(codes.length){const isbn=normalizeIsbn(codes[0].rawValue);if(validIsbn(isbn)){navigator.vibrate?.(120);await closeScanner();lookupIsbn(isbn);return}}}}catch(e){console.warn(e)}rafId=requestAnimationFrame(scanLoop)}
-async function openScanner(){if(!window.isSecureContext){toast('스마트폰에서는 HTTPS 주소로 접속해야 카메라를 사용할 수 있습니다.');return}if(!navigator.mediaDevices?.getUserMedia){toast('이 브라우저는 카메라를 지원하지 않습니다.');return}$('#scannerView').classList.add('open');$('#scannerView').setAttribute('aria-hidden','false');try{await startCamera()}catch(e){console.error(e);$('#cameraStatus').textContent='카메라를 열지 못했습니다. 다른 앱의 카메라 사용을 종료하거나 아래에서 카메라를 바꿔보세요.';toast(`${e.name||'CameraError'}: 카메라를 시작하지 못했습니다.`);await enumerateCameras()}}
-async function closeScanner(){await stopCamera();$('#scannerView').classList.remove('open');$('#scannerView').setAttribute('aria-hidden','true')}
-$('#openScanner').onclick=openScanner;$('#closeScanner').onclick=closeScanner;$('#cameraSelect').onchange=async e=>{try{await startCamera(e.target.value)}catch(err){toast('선택한 카메라를 시작하지 못했습니다.')}};
-$('#torchBtn').onclick=async()=>{const track=stream?.getVideoTracks()[0];const caps=track?.getCapabilities?.();if(!caps?.torch){toast('이 기기는 플래시 제어를 지원하지 않습니다.');return}torchOn=!torchOn;await track.applyConstraints({advanced:[{torch:torchOn}]});$('#torchBtn').textContent=torchOn?'🔦 플래시 끄기':'🔦 플래시'};
+async function enumerateCameras(){
+  try{
+    if(typeof Html5Qrcode==='undefined') return [];
+    const cams=await Html5Qrcode.getCameras();
+    $('#cameraSelect').innerHTML=cams.map((c,i)=>`<option value="${c.id}">${esc(c.label||`카메라 ${i+1}`)}</option>`).join('');
+    const rear=cams.find(c=>/back|rear|environment|후면/i.test(c.label));
+    if(rear) $('#cameraSelect').value=rear.id;
+    return cams;
+  }catch(e){
+    console.warn(e);
+    return [];
+  }
+}
+async function stopCamera(){
+  scanning=false;
+  torchOn=false;
+  if(liveQr){
+    try{await liveQr.stop()}catch(e){}
+    try{await liveQr.clear()}catch(e){}
+    liveQr=null;
+  }
+  $('#readerLive').innerHTML='';
+  $('#torchBtn').textContent='🔦 플래시';
+}
+async function startCamera(deviceId=''){
+  await stopCamera();
+  if(typeof Html5Qrcode==='undefined') throw new Error('ScannerModuleUnavailable');
+  liveQr=new Html5Qrcode('readerLive', false);
+  const config={
+    fps:12,
+    qrbox:(w,h)=>({width:Math.min(w*0.9,520),height:Math.min(h*0.28,180)}),
+    aspectRatio:1.7778,
+    formatsToSupport:[Html5QrcodeSupportedFormats.EAN_13]
+  };
+  const cameraConfig=deviceId?{deviceId:{exact:deviceId}}:{facingMode:'environment'};
+  await liveQr.start(
+    cameraConfig,
+    config,
+    async decodedText=>{
+      const isbn=normalizeIsbn(decodedText);
+      if(!validIsbn(isbn)||!scanning) return;
+      scanning=false;
+      navigator.vibrate?.(120);
+      await closeScanner();
+      lookupIsbn(isbn);
+    },
+    ()=>{}
+  );
+  scanning=true;
+  const cams=await enumerateCameras();
+  if(!deviceId){
+    const rear=cams.find(c=>/back|rear|environment|후면/i.test(c.label));
+    if(rear) $('#cameraSelect').value=rear.id;
+  }
+  $('#cameraStatus').textContent='책 뒤의 978 또는 979 바코드를 사각형 안에 맞추세요.';
+}
+async function openScanner(){
+  if(!window.isSecureContext){
+    toast('HTTPS 주소에서 접속해야 카메라를 사용할 수 있습니다.');
+    return;
+  }
+  if(typeof Html5Qrcode==='undefined'){
+    toast('바코드 모듈을 불러오지 못했습니다. 인터넷 연결을 확인하세요.');
+    return;
+  }
+  $('#scannerView').classList.add('open');
+  $('#scannerView').setAttribute('aria-hidden','false');
+  $('#cameraStatus').textContent='후면 카메라를 준비하고 있습니다…';
+  try{
+    await startCamera();
+  }catch(e){
+    console.error(e);
+    $('#cameraStatus').textContent='카메라를 열지 못했습니다. Safari의 카메라 권한을 확인하세요.';
+    toast(`${e.name||'CameraError'}: 카메라를 시작하지 못했습니다.`);
+    await enumerateCameras();
+  }
+}
+async function closeScanner(){
+  await stopCamera();
+  $('#scannerView').classList.remove('open');
+  $('#scannerView').setAttribute('aria-hidden','true');
+}
+$('#openScanner').onclick=openScanner;
+$('#closeScanner').onclick=closeScanner;
+$('#cameraSelect').onchange=async e=>{
+  try{await startCamera(e.target.value)}
+  catch(err){console.error(err);toast('선택한 카메라를 시작하지 못했습니다.')}
+};
+$('#torchBtn').onclick=async()=>{
+  try{
+    if(!liveQr) throw new Error();
+    torchOn=!torchOn;
+    await liveQr.applyVideoConstraints({advanced:[{torch:torchOn}]});
+    $('#torchBtn').textContent=torchOn?'🔦 플래시 끄기':'🔦 플래시';
+  }catch(e){
+    torchOn=false;
+    toast('iPhone Safari에서는 플래시 제어가 지원되지 않을 수 있습니다.');
+  }
+};
 $('#photoBtn').onclick=()=>$('#photoInput').click();$('#photoInput').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;if(typeof Html5Qrcode==='undefined'){toast('사진 인식 모듈을 불러오지 못했습니다. 인터넷 연결을 확인하세요.');return}try{const qr=new Html5Qrcode('readerHidden');const text=await qr.scanFile(file,true);await qr.clear();const isbn=normalizeIsbn(text);if(!validIsbn(isbn))throw new Error();await closeScanner();lookupIsbn(isbn)}catch(err){toast('사진에서 ISBN 바코드를 찾지 못했습니다.')}};
 $('#lookupBtn').onclick=()=>lookupIsbn($('#isbnInput').value);$('#isbnInput').addEventListener('keydown',e=>{if(e.key==='Enter')lookupIsbn(e.target.value)});$('#manualBtn').onclick=()=>openForm({status:'읽고 싶은 책'});$('#searchInput').oninput=render;$('#filterStatus').onchange=render;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('#installBtn').classList.add('show')});$('#installBtn').onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$('#installBtn').classList.remove('show')};
