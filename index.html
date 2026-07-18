@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="나의 서재" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="icon-192.png" />
-  <title>나의 서재 · iPhone ISBN 스캐너</title>
+  <title>나의 서재 · iPhone ISBN 스캐너 v3</title>
   <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
   <style>
     :root{--bg:#f7f3ed;--panel:#fffdf9;--ink:#2d2925;--muted:#77706a;--line:#e7ddd1;--accent:#72533d;--accent2:#efe3d5;--danger:#a23b3b;--safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom)}
@@ -39,7 +39,7 @@
   <div id="readerLive"></div>
   <div class="scan-frame"><div class="scan-line"></div></div>
   <div class="scanner-ui">
-    <div class="scanner-top"><button id="closeScanner" class="round">✕ 닫기</button><select id="cameraSelect" class="camera-select"></select></div>
+    <div class="scanner-top"><button id="closeScanner" class="round">✕ 닫기</button><button id="switchCamera" class="round">🔄 전·후면 전환</button></div>
     <div class="scanner-bottom"><p id="cameraStatus">후면 카메라를 준비하고 있습니다…</p><div class="scanner-actions"><button id="torchBtn" class="round">🔦 플래시</button><button id="photoBtn" class="round">🖼 사진으로 찾기</button></div></div>
   </div>
 </section>
@@ -53,33 +53,8 @@
 const STORAGE_KEY='my-isbn-library-mobile-v1';
 let books=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
 let liveQr=null, scanning=false, torchOn=false, deferredPrompt=null;
-const $=s=>document.querySelector(s);
-const toast=m=>{const e=$('#toast');e.textContent=m;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2400)};
-const normalizeIsbn=v=>(v||'').replace(/[^0-9Xx]/g,'').toUpperCase();
-const validIsbn=v=>/^(\d{13}|\d{9}[\dX])$/.test(normalizeIsbn(v));
-const esc=v=>String(v||'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(books));render()}
-function render(){const q=$('#searchInput').value.trim().toLowerCase(),st=$('#filterStatus').value;const f=books.filter(b=>(!st||b.status===st)&&(!q||[b.title,b.author,b.isbn,b.note,b.category].join(' ').toLowerCase().includes(q)));$('#bookCount').textContent=books.length;$('#bookList').innerHTML=f.length?f.map(b=>`<article class="book">${b.cover?`<img class="cover" src="${esc(b.cover)}" alt="${esc(b.title)} 표지" onerror="this.outerHTML='<div class=&quot;cover cover-placeholder&quot;>표지 없음</div>'">`:`<div class="cover cover-placeholder">${esc(b.title)}</div>`}<h3>${esc(b.title)}</h3><div class="meta">${esc(b.author||'저자 미상')}<br>${esc(b.publisher||'')}</div><span class="badge">${esc(b.status)}</span><div class="actions"><button class="secondary" onclick="editBook('${b.id}')">노트/수정</button><button class="danger" onclick="removeBook('${b.id}')">삭제</button></div></article>`).join(''):`<div class="empty">등록된 책이 없습니다.<br>ISBN 바코드를 스캔해 첫 책을 추가해보세요.</div>`}
-function openForm(b={}){$('#dialogTitle').textContent=b.id?'책 정보 및 노트 수정':'책 등록';$('#editId').value=b.id||'';$('#formIsbn').value=b.isbn||'';$('#formTitle').value=b.title||'';$('#formAuthor').value=b.author||'';$('#formPublisher').value=b.publisher||'';$('#formCover').value=b.cover||'';$('#formStatus').value=b.status||'읽고 싶은 책';$('#formCategory').value=b.category||'';$('#formNote').value=b.note||'';$('#bookDialog').showModal()}
-window.editBook=id=>openForm(books.find(b=>b.id===id));window.removeBook=id=>{if(confirm('이 책과 노트를 삭제할까요?')){books=books.filter(b=>b.id!==id);save()}};
-$('#bookForm').addEventListener('submit',e=>{e.preventDefault();const id=$('#editId').value;const b={id:id||crypto.randomUUID(),isbn:normalizeIsbn($('#formIsbn').value),title:$('#formTitle').value.trim(),author:$('#formAuthor').value.trim(),publisher:$('#formPublisher').value.trim(),cover:$('#formCover').value.trim(),status:$('#formStatus').value,category:$('#formCategory').value.trim(),note:$('#formNote').value.trim(),updatedAt:new Date().toISOString()};if(!b.title){toast('제목을 입력해 주세요.');return}if(id)books=books.map(x=>x.id===id?b:x);else books.unshift(b);save();$('#bookDialog').close();toast(id?'수정했습니다.':'서재에 등록했습니다.')});
-const cover=u=>(u||'').replace(/^http:/,'https:');
-async function openLibrary(isbn){const r=await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=data&format=json`);if(!r.ok)return null;const d=await r.json(),x=d[`ISBN:${isbn}`];if(!x)return null;return{isbn,title:x.title||'',author:(x.authors||[]).map(a=>a.name).join(', '),publisher:(x.publishers||[]).map(p=>p.name).join(', '),cover:cover(x.cover?.large||x.cover?.medium||x.cover?.small),category:(x.subjects||[]).slice(0,2).map(v=>v.name||v).join(', ')}}
-async function googleBooks(isbn){const r=await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&maxResults=5`);if(!r.ok)return null;const d=await r.json(),item=(d.items||[]).find(i=>(i.volumeInfo?.industryIdentifiers||[]).some(v=>normalizeIsbn(v.identifier)===isbn))||d.items?.[0];if(!item)return null;const x=item.volumeInfo||{};return{isbn,title:[x.title,x.subtitle].filter(Boolean).join(' — '),author:(x.authors||[]).join(', '),publisher:x.publisher||'',cover:cover(x.imageLinks?.large||x.imageLinks?.medium||x.imageLinks?.thumbnail),category:(x.categories||[]).slice(0,2).join(', ')}}
-async function lookupIsbn(raw){const isbn=normalizeIsbn(raw);if(!validIsbn(isbn)){toast('올바른 ISBN을 입력해 주세요.');return}$('#isbnInput').value=isbn;if(books.some(b=>b.isbn===isbn)){toast('이미 등록된 책입니다.');return}$('#lookupBtn').disabled=true;$('#lookupStatus').textContent=`ISBN ${isbn} 검색 중…`;try{let b=await openLibrary(isbn);if(!b)b=await googleBooks(isbn);if(b){openForm({...b,status:'읽고 싶은 책',note:''});$('#lookupStatus').textContent=`“${b.title}” 정보를 찾았습니다.`;toast('책 정보를 찾았습니다.')}else{openForm({isbn,status:'읽고 싶은 책'});$('#lookupStatus').textContent='책 정보를 찾지 못해 직접 입력 화면을 열었습니다.'}}catch(e){console.error(e);openForm({isbn,status:'읽고 싶은 책'});$('#lookupStatus').textContent='온라인 조회에 실패했습니다. 인터넷 연결을 확인하세요.'}finally{$('#lookupBtn').disabled=false}}
-async function enumerateCameras(){
-  try{
-    if(typeof Html5Qrcode==='undefined') return [];
-    const cams=await Html5Qrcode.getCameras();
-    $('#cameraSelect').innerHTML=cams.map((c,i)=>`<option value="${c.id}">${esc(c.label||`카메라 ${i+1}`)}</option>`).join('');
-    const rear=cams.find(c=>/back|rear|environment|후면/i.test(c.label));
-    if(rear) $('#cameraSelect').value=rear.id;
-    return cams;
-  }catch(e){
-    console.warn(e);
-    return [];
-  }
-}
+let currentFacing='environment';
+
 async function stopCamera(){
   scanning=false;
   torchOn=false;
@@ -91,22 +66,40 @@ async function stopCamera(){
   $('#readerLive').innerHTML='';
   $('#torchBtn').textContent='🔦 플래시';
 }
-async function startCamera(deviceId=''){
+
+async function startCamera(facing=currentFacing){
   await stopCamera();
   if(typeof Html5Qrcode==='undefined') throw new Error('ScannerModuleUnavailable');
-  liveQr=new Html5Qrcode('readerLive', false);
+
+  currentFacing=facing;
+  liveQr=new Html5Qrcode('readerLive', {
+    verbose:false,
+    experimentalFeatures:{useBarCodeDetectorIfSupported:false}
+  });
+
   const config={
-    fps:12,
-    qrbox:(w,h)=>({width:Math.min(w*0.9,520),height:Math.min(h*0.28,180)}),
-    aspectRatio:1.7778,
-    formatsToSupport:[Html5QrcodeSupportedFormats.EAN_13]
+    fps:15,
+    disableFlip:false,
+    formatsToSupport:[
+      Html5QrcodeSupportedFormats.EAN_13,
+      Html5QrcodeSupportedFormats.EAN_8,
+      Html5QrcodeSupportedFormats.UPC_A,
+      Html5QrcodeSupportedFormats.UPC_E,
+      Html5QrcodeSupportedFormats.CODE_128
+    ],
+    videoConstraints:{
+      facingMode:{ideal:facing},
+      width:{ideal:1920},
+      height:{ideal:1080}
+    }
   };
-  const cameraConfig=deviceId?{deviceId:{exact:deviceId}}:{facingMode:'environment'};
+
   await liveQr.start(
-    cameraConfig,
+    {facingMode:{ideal:facing}},
     config,
     async decodedText=>{
-      const isbn=normalizeIsbn(decodedText);
+      const digits=String(decodedText||'').replace(/\D/g,'');
+      const isbn=normalizeIsbn(digits);
       if(!validIsbn(isbn)||!scanning) return;
       scanning=false;
       navigator.vibrate?.(120);
@@ -115,14 +108,14 @@ async function startCamera(deviceId=''){
     },
     ()=>{}
   );
+
   scanning=true;
-  const cams=await enumerateCameras();
-  if(!deviceId){
-    const rear=cams.find(c=>/back|rear|environment|후면/i.test(c.label));
-    if(rear) $('#cameraSelect').value=rear.id;
-  }
-  $('#cameraStatus').textContent='책 뒤의 978 또는 979 바코드를 사각형 안에 맞추세요.';
+  $('#cameraStatus').textContent =
+    facing==='environment'
+      ? '후면 카메라 사용 중 · 978/979 바코드를 화면 가득 크게 맞추세요.'
+      : '전면 카메라 사용 중 · 전환 버튼을 눌러 후면 카메라를 사용하세요.';
 }
+
 async function openScanner(){
   if(!window.isSecureContext){
     toast('HTTPS 주소에서 접속해야 카메라를 사용할 수 있습니다.');
@@ -136,25 +129,33 @@ async function openScanner(){
   $('#scannerView').setAttribute('aria-hidden','false');
   $('#cameraStatus').textContent='후면 카메라를 준비하고 있습니다…';
   try{
-    await startCamera();
+    await startCamera('environment');
   }catch(e){
     console.error(e);
-    $('#cameraStatus').textContent='카메라를 열지 못했습니다. Safari의 카메라 권한을 확인하세요.';
+    $('#cameraStatus').textContent='후면 카메라를 열지 못했습니다. 전·후면 전환을 눌러 다시 시도하세요.';
     toast(`${e.name||'CameraError'}: 카메라를 시작하지 못했습니다.`);
-    await enumerateCameras();
   }
 }
+
 async function closeScanner(){
   await stopCamera();
   $('#scannerView').classList.remove('open');
   $('#scannerView').setAttribute('aria-hidden','true');
 }
+
 $('#openScanner').onclick=openScanner;
 $('#closeScanner').onclick=closeScanner;
-$('#cameraSelect').onchange=async e=>{
-  try{await startCamera(e.target.value)}
-  catch(err){console.error(err);toast('선택한 카메라를 시작하지 못했습니다.')}
+$('#switchCamera').onclick=async()=>{
+  const next=currentFacing==='environment'?'user':'environment';
+  $('#cameraStatus').textContent=next==='environment'?'후면 카메라로 전환 중…':'전면 카메라로 전환 중…';
+  try{
+    await startCamera(next);
+  }catch(err){
+    console.error(err);
+    toast('카메라 전환에 실패했습니다.');
+  }
 };
+
 $('#torchBtn').onclick=async()=>{
   try{
     if(!liveQr) throw new Error();
@@ -163,7 +164,7 @@ $('#torchBtn').onclick=async()=>{
     $('#torchBtn').textContent=torchOn?'🔦 플래시 끄기':'🔦 플래시';
   }catch(e){
     torchOn=false;
-    toast('iPhone Safari에서는 플래시 제어가 지원되지 않을 수 있습니다.');
+    toast('이 iPhone/Safari에서는 플래시 제어가 지원되지 않을 수 있습니다.');
   }
 };
 $('#photoBtn').onclick=()=>$('#photoInput').click();$('#photoInput').onchange=async e=>{const file=e.target.files?.[0];if(!file)return;if(typeof Html5Qrcode==='undefined'){toast('사진 인식 모듈을 불러오지 못했습니다. 인터넷 연결을 확인하세요.');return}try{const qr=new Html5Qrcode('readerHidden');const text=await qr.scanFile(file,true);await qr.clear();const isbn=normalizeIsbn(text);if(!validIsbn(isbn))throw new Error();await closeScanner();lookupIsbn(isbn)}catch(err){toast('사진에서 ISBN 바코드를 찾지 못했습니다.')}};
